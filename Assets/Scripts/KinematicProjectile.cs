@@ -6,7 +6,10 @@ public class KinematicProjectile : MonoBehaviour
     // Variables
     Rigidbody2D rb;
     SpriteRenderer sr;
+    TrailRenderer trail;
+
     public float speed;
+    public float maxDrag = 2f;
 
     // Position References
     Vector2 startPos;
@@ -19,6 +22,8 @@ public class KinematicProjectile : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        trail = GetComponent<TrailRenderer>();
+        trail.enabled = false;
         startPos = rb.position;
         rb.bodyType = RigidbodyType2D.Kinematic;
 
@@ -53,9 +58,29 @@ public class KinematicProjectile : MonoBehaviour
 
     private void OnMouseDrag()
     {
+
+
+
         // Get the mouse position in world space and set the projectile's position to the mouse position
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        transform.position = new Vector2(mousePos.x, mousePos.y);
+        Vector2 desiredPos = mousePos;
+
+        float distance = Vector2.Distance(desiredPos, startPos);
+        if (distance > maxDrag)
+        {
+            direction = desiredPos - startPos;
+            direction.Normalize();
+            desiredPos = startPos + (direction * maxDrag);
+        }
+
+        if (desiredPos.x > startPos.x)
+        {
+            desiredPos.x = startPos.x;
+        }
+
+        rb.position = desiredPos;
+
+        //transform.position = new Vector2(mousePos.x, mousePos.y);
 
         // Based on the distance between the start position and the mouse position, calculate the speed of the projectile
         speed = Vector2.Distance(startPos, mousePos) * 3f; // Adjust the multiplier as needed for desired speed
@@ -64,8 +89,10 @@ public class KinematicProjectile : MonoBehaviour
     // x = v * t * cos(theta) (where v is the speed, t is the time, and theta is the angle of the trajectory)
     private void LaunchProjectile()
     {
-        float gravity = -9.8f;
-        float mass = 1f;
+        // Set the Trail component to be enabled so that it starts rendering the trail of the projectile
+        trail.enabled = true;
+        //float gravity = -9.8f;
+        //float mass = 1f;
         // Set the projectile's velocity to the direction multiplied by the speed
         rb.linearVelocity = direction * speed;
         // Add Gravity to the projectile so that it follows a parabolic trajectory
@@ -74,6 +101,9 @@ public class KinematicProjectile : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         rb.bodyType = RigidbodyType2D.Dynamic;
+        speed = 0f;
+        // Disable the Trail component so that it stops rendering the trail of the projectile
+        trail.enabled = false;
         // Add particle effects and sound effects here
 
         // Check if we are moving. If we're not, then start coroutine.
