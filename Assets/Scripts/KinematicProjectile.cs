@@ -18,6 +18,7 @@ public class KinematicProjectile : MonoBehaviour
 
     public bool shoGon = false;
     public bool bigBertha = false;
+    private bool shogonTemp = false;
 
     public GameObject shogunPrefab;
     public int shardCount = 2;
@@ -58,11 +59,9 @@ public class KinematicProjectile : MonoBehaviour
                 // Check if the projectile is falling, then call the Sotgun method.
                 if (rb.linearVelocity.y < 0)
                 {
-                    for (int i = 0; i < shardCount; i++)
-                    {
-                        Shotgun();
-                    }
-                    
+                    Shotgun();
+                    shoGon = false;
+                    shogonTemp = true;
                 }
             }
         }
@@ -148,6 +147,11 @@ public class KinematicProjectile : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Kinematic;
         rb.linearVelocity = Vector2.zero;
         isLaunched = false;
+        if (shogonTemp)
+        {
+            shogonTemp = false;
+            shoGon = true;
+        }
     }
 
     private void Shotgun()
