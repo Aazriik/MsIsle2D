@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7680087605254669907
+--- !u!1 &8460356914766449512
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,42 +8,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6552345739612440709}
-  - component: {fileID: 4379103417742646734}
-  - component: {fileID: 5702297175117736080}
-  - component: {fileID: 6582383544237765977}
-  - component: {fileID: 4786027612461534644}
-  - component: {fileID: 8128902711064111909}
+  - component: {fileID: 4106917881133706872}
+  - component: {fileID: 1060446591324081147}
+  - component: {fileID: 2753604065517531550}
+  - component: {fileID: 4938313750193343432}
+  - component: {fileID: 1528738446993459773}
+  - component: {fileID: 1178011389444036374}
   m_Layer: 3
-  m_Name: Projectile
+  m_Name: ShoGon
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6552345739612440709
+--- !u!4 &4106917881133706872
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7680087605254669907}
+  m_GameObject: {fileID: 8460356914766449512}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.03, y: -2.97, z: 0}
+  m_LocalPosition: {x: -4.49, y: -4.11, z: 0}
   m_LocalScale: {x: 0.04, y: 0.04, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &4379103417742646734
+--- !u!212 &1060446591324081147
 SpriteRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7680087605254669907}
+  m_GameObject: {fileID: 8460356914766449512}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 5501955935485847307, guid: e16e2cec32cf556439f27c20b6eaa1ed, type: 3}
+  m_Sprite: {fileID: 8490029909462355931, guid: 971154088ab087d4292483f0bfb6cd20, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -95,14 +95,14 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!50 &5702297175117736080
+--- !u!50 &2753604065517531550
 Rigidbody2D:
   serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7680087605254669907}
+  m_GameObject: {fileID: 8460356914766449512}
   m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
@@ -122,13 +122,13 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!58 &6582383544237765977
+--- !u!58 &4938313750193343432
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7680087605254669907}
+  m_GameObject: {fileID: 8460356914766449512}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -158,29 +158,33 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 8.1875
---- !u!114 &4786027612461534644
+--- !u!114 &1528738446993459773
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7680087605254669907}
+  m_GameObject: {fileID: 8460356914766449512}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56a0348bd3499b64181b63f3911f4d4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KinematicProjectile
   speed: 0
+  maxSpeed: 15
+  speedMultiplier: 3
   maxDrag: 2
   gravityScale: 5
---- !u!96 &8128902711064111909
+  shoGon: 0
+  bigBertha: 0
+--- !u!96 &1178011389444036374
 TrailRenderer:
   serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7680087605254669907}
+  m_GameObject: {fileID: 8460356914766449512}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
