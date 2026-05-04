@@ -171,8 +171,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KinematicProjectile
   speed: 0
+  maxSpeed: 15
+  speedMultiplier: 3
   maxDrag: 2
   gravityScale: 5
+  shoGon: 0
+  bigBertha: 0
+  shogunPrefab: {fileID: 8460356914766449512, guid: c8a9dc389d764c649950484a68549bff, type: 3}
 --- !u!96 &8128902711064111909
 TrailRenderer:
   serializedVersion: 4

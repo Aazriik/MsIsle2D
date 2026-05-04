@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEditor;
 
 public class KinematicProjectile : MonoBehaviour
 {
@@ -14,15 +15,17 @@ public class KinematicProjectile : MonoBehaviour
     public float maxDrag = 2f;
     private bool isLaunched = false;
     public float gravityScale = 5f;
-    
+
     public bool shoGon = false;
     public bool bigBertha = false;
+
+    public GameObject shogunPrefab;
+    public int shardCount = 2;
 
     // Position References
     Vector2 startPos;
     Vector2 currentPos;
     Vector2 direction;
-    Vector2 endPos;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -44,7 +47,6 @@ public class KinematicProjectile : MonoBehaviour
             // Add Gravity to the projectile so that it follows a parabolic trajectory
             // rb.AddForce uses the Physics Engine, butt since we are using a Kinematic Rigidbody, we will manually apply gravity by modifying the rb.linearVelocity of the Rigidbody2D. We will add a downward force to the linear velocity to simulate gravity. Then we will multiply it by Time.deltaTime to make it frame rate independent. Finally, we will multiply it by gravityScale to adjust the strength of the gravity.
             rb.linearVelocity += Vector2.down * gravityScale * Time.deltaTime;
-
             // Set rotation of the projectile to the direction of the trajectory
             // We will use the Atan2 function to calculate the angle of the trajectory based on the linear velocity of the Rigidbody2D. The Atan2 function takes the y and x components of the linear velocity and returns the angle in radians. We will then convert it to degrees by multiplying it by Mathf.Rad2Deg. We will also check if the y component of the linear velocity is greater than 0, which means the projectile is moving upwards, and if so, we will add 180 degrees to the angle to make it face downwards.
             float angle = direction.y > 0 ? Mathf.Atan2(rb.linearVelocity.y, rb.linearVelocity.x)
@@ -56,8 +58,11 @@ public class KinematicProjectile : MonoBehaviour
                 // Check if the projectile is falling, then call the Sotgun method.
                 if (rb.linearVelocity.y < 0)
                 {
-                    Shotgun();
-                    shoGon = false;
+                    for (int i = 0; i < shardCount; i++)
+                    {
+                        Shotgun();
+                    }
+                    
                 }
             }
         }
@@ -119,7 +124,7 @@ public class KinematicProjectile : MonoBehaviour
         trail.enabled = true;
         // Set the projectile's velocity to the direction multiplied by the speed
         rb.linearVelocity = direction * speed;
-        
+
         // Add Gravity to the projectile so that it follows a parabolic trajectory
     }
 
@@ -147,9 +152,45 @@ public class KinematicProjectile : MonoBehaviour
 
     private void Shotgun()
     {
-        // Check if the projectile is falling, then instantiate two additional projectiles.
-        Instantiate(gameObject, rb.position, Quaternion.Euler(0, 0, -45)); // Create a new projectile at the current position of the original projectile and rotate it 45 degrees to the right
-        Instantiate(gameObject, rb.position, Quaternion.Euler(0, 0, 45)); // Create a new projectile at the current position of the original projectile and rotate it 45 degrees to the left
-        // Keep the same speed as the original projectile for the new projectiles, but adjust the direction based on the rotation.
+        for (int i = 0; i < shardCount; i++)
+        {
+            GameObject shard = Instantiate(
+                shogunPrefab,
+                transform.position,
+                Quaternion.identity
+            );
+
+            Rigidbody2D shardRb = shard.GetComponent<Rigidbody2D>();
+
+            if (shardRb != null)
+            {
+                Vector2 randomDirection = new Vector2(Random.Range(1f, 2f), Random.Range(1f, -2f)).normalized;
+                shardRb.linearVelocity = randomDirection * speed;
+            }
+        }
     }
+
+    //private void BreakAsteroid()
+    //{
+    //    for (int i = 0; i < shardCount; i++)
+    //    {
+    //        GameObject shard = Instantiate(
+    //            shardPrefab,
+    //            transform.position,
+    //            Quaternion.identity
+    //        );
+
+    //        Rigidbody2D shardRb = shard.GetComponent<Rigidbody2D>();
+
+    //        if (shardRb != null)
+    //        {
+    //            Vector2 randomDirection = new Vector2(
+    //                Random.Range(-1f, 0.5f),
+    //                Random.Range(-1f, 1f)
+    //            ).normalized;
+
+    //            shardRb.linearVelocity = randomDirection * shardForce;
+    //        }
+    //    }
+    //}
 }

@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 2753604065517531550}
   - component: {fileID: 4938313750193343432}
   - component: {fileID: 1528738446993459773}
+  - component: {fileID: -5639642453396322358}
   - component: {fileID: 1178011389444036374}
   m_Layer: 3
-  m_Name: Aero
+  m_Name: ShardShoGun
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.49, y: -4.11, z: 0}
-  m_LocalScale: {x: 0.07, y: 0.07, z: 1}
+  m_LocalScale: {x: 0.04, y: 0.04, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -85,7 +86,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -8335613602782662041, guid: 3bd55679bf310a744a6ef61692e0e3de, type: 3}
+  m_Sprite: {fileID: 8490029909462355931, guid: 971154088ab087d4292483f0bfb6cd20, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -156,9 +157,30 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.4117361, y: 0}
-  m_Radius: 3.7757645
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 8.1875
 --- !u!114 &1528738446993459773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8460356914766449512}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56a0348bd3499b64181b63f3911f4d4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KinematicProjectile
+  speed: 0
+  maxSpeed: 15
+  speedMultiplier: 3
+  maxDrag: 2
+  gravityScale: 5
+  shoGon: 1
+  bigBertha: 0
+  shogunPrefab: {fileID: 8460356914766449512}
+  shardCount: 2
+--- !u!114 &-5639642453396322358
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -167,17 +189,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8460356914766449512}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56a0348bd3499b64181b63f3911f4d4a, type: 3}
+  m_Script: {fileID: 11500000, guid: f8cbc6af973bf4f48b40c6f4e2306730, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KinematicProjectile
-  speed: 0
-  maxSpeed: 30
-  speedMultiplier: 6
-  maxDrag: 2
+  m_EditorClassIdentifier: Assembly-CSharp::AeroShards
   gravityScale: 5
-  shoGon: 0
-  bigBertha: 0
-  shogunPrefab: {fileID: 8460356914766449512, guid: c8a9dc389d764c649950484a68549bff, type: 3}
 --- !u!96 &1178011389444036374
 TrailRenderer:
   serializedVersion: 4
