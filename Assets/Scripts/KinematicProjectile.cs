@@ -27,6 +27,20 @@ public class KinematicProjectile : MonoBehaviour
     Vector2 currentPos;
     Vector2 direction;
 
+    bool isDragging = false;
+
+    
+    void OnEnable()
+    {   InputManager.Instance.OnTouchBegin += OnTouchBegin;
+        InputManager.Instance.OnTouchEnd += OnTouchEnd;
+    }
+
+    void OnDisable()
+    {
+        InputManager.Instance.OnTouchBegin -= OnTouchBegin;
+        InputManager.Instance.OnTouchEnd -= OnTouchEnd;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -64,17 +78,24 @@ public class KinematicProjectile : MonoBehaviour
                 }
             }
         }
+
+        if (isDragging)
+        {
+            OnTouchDrag();
+        }
     }
 
     // Change Alpha Value of Sprite to 0.7 when you click on the projectile and change it back to 1 when you release the mouse button
-    private void OnMouseDown()
+    private void OnTouchBegin() // OnTouchBegin. Call DRAG function in update.
     {
         // Change Alpha Value of Sprite to 0.7
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.7f);
+        isDragging = true;
     }
 
-    private void OnMouseUp()
+    private void OnTouchEnd() //onTouchEnd. Call LAUNCH function in update.
     {
+        isDragging = false;
         currentPos = rb.position;
         direction = startPos - currentPos;
         direction.Normalize();
@@ -85,10 +106,10 @@ public class KinematicProjectile : MonoBehaviour
         LaunchProjectile();
     }
 
-    private void OnMouseDrag()
+    private void OnTouchDrag()
     {
         // Get the mouse position in world space and set the projectile's position to the mouse position
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(InputManager.Instance.GetTouchScreenPosition());
         Vector2 desiredPos = mousePos;
 
         float distance = Vector2.Distance(desiredPos, startPos);
