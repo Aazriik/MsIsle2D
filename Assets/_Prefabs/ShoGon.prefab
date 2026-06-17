@@ -178,7 +178,7 @@ MonoBehaviour:
   shoGon: 1
   bigBertha: 0
   shogunPrefab: {fileID: 8460356914766449512, guid: 9282179f2e58961418f72947fca5aca5, type: 3}
-  shardCount: 3
+  shardCount: 2
 --- !u!96 &1178011389444036374
 TrailRenderer:
   serializedVersion: 4

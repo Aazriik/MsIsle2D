@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    public GameObject HUD;
+
+
     // Play Button
     public void Play()
     {
@@ -14,5 +17,17 @@ public class MainMenu : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    public void Pause()
+    {
+        Time.timeScale = 0f;
+        HUD.SetActive(false);
+    }
+
+    public void Resume()
+    {
+        Time.timeScale = 1f;
+        HUD.SetActive(true);
     }
 }
