@@ -16,6 +16,7 @@ public class KinematicProjectile : MonoBehaviour
     private bool isLaunched = false;
     public float gravityScale = 5f;
 
+    // Projectiles.
     public bool shoGon = false;
     public bool bigBertha = false;
     private bool shogonTemp = false;

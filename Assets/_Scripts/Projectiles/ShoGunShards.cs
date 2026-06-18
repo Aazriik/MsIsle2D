@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class AeroShards : MonoBehaviour
+public class ShoGunShards : MonoBehaviour
 {
     Rigidbody2D rb;
     TrailRenderer trail;
