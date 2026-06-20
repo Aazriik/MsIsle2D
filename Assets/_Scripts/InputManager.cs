@@ -42,9 +42,7 @@ public class InputManager : MonoBehaviour
         input = new PlayerControls();
     }
 
-
-
-
+    #region Input Manager
     private void OnEnable()
     {
         input.Enable();
@@ -57,4 +55,5 @@ public class InputManager : MonoBehaviour
     {
         input.Disable();
     }
+    #endregion
 }

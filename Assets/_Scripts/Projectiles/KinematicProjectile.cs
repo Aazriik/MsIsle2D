@@ -3,7 +3,7 @@ using System.Collections;
 
 public class KinematicProjectile : MonoBehaviour
 {
-    // Variables
+    #region Variables
     Rigidbody2D rb;
     SpriteRenderer sr;
     TrailRenderer trail;
@@ -30,8 +30,9 @@ public class KinematicProjectile : MonoBehaviour
     Vector2 direction;
 
     bool isDragging = false;
+    #endregion
 
-    
+    #region Input Manager
     void OnEnable()
     {   InputManager.Instance.OnTouchBegin += OnTouchBegin;
         InputManager.Instance.OnTouchEnd += OnTouchEnd;
@@ -42,6 +43,7 @@ public class KinematicProjectile : MonoBehaviour
         InputManager.Instance.OnTouchBegin -= OnTouchBegin;
         InputManager.Instance.OnTouchEnd -= OnTouchEnd;
     }
+    #endregion
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

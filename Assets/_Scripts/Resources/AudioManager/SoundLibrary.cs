@@ -16,9 +16,7 @@ public class SoundLibrary : MonoBehaviour
         foreach (var soundEffect in soundEffects)
         {
             if (soundEffect.groupID == name)
-            {
                 return soundEffect.clips[Random.Range(0, soundEffect.clips.Length)];
-            }
         }
 
         return null;

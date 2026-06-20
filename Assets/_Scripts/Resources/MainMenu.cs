@@ -5,11 +5,17 @@ public class MainMenu : MonoBehaviour
 {
     public GameObject HUD;
 
+    private void Start()
+    {
+        // Play Main Menu Music
+        AudioManager.Instance.PlayMusic("Main Menu");
+    }
 
     // Play Button
     public void Play()
     {
         LevelManager.Instance.LoadScene("lvl_1", "CircleWipe");
+        AudioManager.Instance.PlayMusic("Game Lvl 1");
         //LevelManager.Instance.GetComponent<Canvas>().sortingOrder = 100;
     }
 

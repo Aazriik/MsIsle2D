@@ -43,6 +43,7 @@ public class LevelManager : MonoBehaviour
     // Coroutine that manages Scene Transitions with Loading Bar and Scene Transition Animations.
     private IEnumerator LoadSceneAsync(string sceneName, string transitionName)
     {
+        // Move UI to Sorting Order 100 so it's on top of everything.
         canvas.sortingOrder = 100;
         // For Loop. But using System.linq to have a "one-liner". First time using it to see how it is.
         // Looping through the "transitions" array until we find the "First" element called t that satisfies the following condition:
@@ -73,6 +74,7 @@ public class LevelManager : MonoBehaviour
         progressBar.gameObject.SetActive(false);
         // Yield/Wait until animation is done.
         yield return transition.AnimateTransitionOUT();
+        // Move UI to Sorting Order -1 so it's behind the Scene Transitions.
         canvas.sortingOrder = -1;
     }
 }
