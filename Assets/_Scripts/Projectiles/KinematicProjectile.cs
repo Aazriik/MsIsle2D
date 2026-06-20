@@ -3,10 +3,11 @@ using System.Collections;
 
 public class KinematicProjectile : MonoBehaviour
 {
-    // Variables
+    #region Variables
     Rigidbody2D rb;
     SpriteRenderer sr;
     TrailRenderer trail;
+    Collider2D collider2D;
 
     public float speed;
     public float maxSpeed = 15f;
@@ -15,6 +16,7 @@ public class KinematicProjectile : MonoBehaviour
     private bool isLaunched = false;
     public float gravityScale = 5f;
 
+    // Projectiles.
     public bool shoGon = false;
     public bool bigBertha = false;
     private bool shogonTemp = false;
@@ -28,8 +30,9 @@ public class KinematicProjectile : MonoBehaviour
     Vector2 direction;
 
     bool isDragging = false;
+    #endregion
 
-    
+    #region Input Manager
     void OnEnable()
     {   InputManager.Instance.OnTouchBegin += OnTouchBegin;
         InputManager.Instance.OnTouchEnd += OnTouchEnd;
@@ -40,6 +43,7 @@ public class KinematicProjectile : MonoBehaviour
         InputManager.Instance.OnTouchBegin -= OnTouchBegin;
         InputManager.Instance.OnTouchEnd -= OnTouchEnd;
     }
+    #endregion
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -47,6 +51,7 @@ public class KinematicProjectile : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         trail = GetComponent<TrailRenderer>();
+        collider2D = GetComponent<Collider2D>();
         trail.enabled = false;
         startPos = rb.position;
         rb.bodyType = RigidbodyType2D.Kinematic;
@@ -56,15 +61,6 @@ public class KinematicProjectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            Vector3 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-            touchPosition.z = 0f;
-            //transform.position = touchPosition;
-        }
-
-
         if (isLaunched)
         {
             // Add Gravity to the projectile so that it follows a parabolic trajectory
@@ -97,22 +93,39 @@ public class KinematicProjectile : MonoBehaviour
     // Change Alpha Value of Sprite to 0.7 when you click on the projectile and change it back to 1 when you release the mouse button
     private void OnTouchBegin() // OnTouchBegin. Call DRAG function in update.
     {
-        // Change Alpha Value of Sprite to 0.7
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.7f);
-        isDragging = true;
+        // Grab Touch World Position.
+        Vector3 touchPos = InputManager.Instance.GetTouchWorldPosition();
+        // Raycast from camera to touch pos and see if you hit the colider, then accept dragging input.
+
+        Collider2D hitCollider = Physics2D.OverlapPoint(touchPos);
+
+        if (hitCollider == null)
+            return;
+
+        if (!isLaunched && (hitCollider = collider2D))
+        {
+            // Change Alpha Value of Sprite to 0.7
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.7f);
+            //isDragging = true;
+        }
     }
 
     private void OnTouchEnd() //onTouchEnd. Call LAUNCH function in update.
     {
-        isDragging = false;
-        currentPos = rb.position;
-        direction = startPos - currentPos;
-        direction.Normalize();
+        if (!isLaunched)
+        {
+            isDragging = false;
+            currentPos = rb.position;
+            direction = startPos - currentPos;
+            direction.Normalize();
 
-        // Change Alpha Value of Sprite to 1
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
-
-        LaunchProjectile();
+            // Change Alpha Value of Sprite to 1.
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
+            // Launch Projectile.
+            LaunchProjectile();
+        }
+        else
+            return;
     }
 
     private void OnTouchDrag()
@@ -120,6 +133,8 @@ public class KinematicProjectile : MonoBehaviour
         // Get the mouse position in world space and set the projectile's position to the mouse position
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(InputManager.Instance.GetTouchScreenPosition());
         Vector2 desiredPos = mousePos;
+
+        isDragging = true;
 
         float distance = Vector2.Distance(desiredPos, startPos);
         if (distance > maxDrag)
@@ -136,8 +151,6 @@ public class KinematicProjectile : MonoBehaviour
 
         rb.position = desiredPos;
 
-        //transform.position = new Vector2(mousePos.x, mousePos.y);
-
         // Based on the distance between the start position and the mouse position, calculate the speed of the projectile
         speed = Vector2.Distance(startPos, mousePos) * speedMultiplier; // Adjust the multiplier as needed for desired speed
         // Clamp speed to maxSpeed
@@ -152,18 +165,15 @@ public class KinematicProjectile : MonoBehaviour
         trail.enabled = true;
         // Set the projectile's velocity to the direction multiplied by the speed
         rb.linearVelocity = direction * speed;
-
-        // Add Gravity to the projectile so that it follows a parabolic trajectory
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         rb.bodyType = RigidbodyType2D.Dynamic;
         speed = 0f;
-        // Disable the Trail component so that it stops rendering the trail of the projectile
+        // Disable the Trail component so that it stops rendering the trail of the projectile.
         trail.enabled = false;
-        // Add particle effects and sound effects here
-
+        // Add particle effects and sound effects here.
         // Check if we are moving. If we're not, then start coroutine.
         StartCoroutine(RestartDelay());
     }

@@ -11,13 +11,13 @@ public class InputManager : MonoBehaviour
     public event System.Action OnTouchEnd;
     public event System.Action<Vector3> OnPhoneTilt;
     public Vector2 GetTouchScreenPosition() => input.Gameplay.PrimaryPosition.ReadValue<Vector2>();
-    public Vector3 GetTouchWorldPosition(Camera mainCamera)
+    public Vector3 GetTouchWorldPosition(Camera mainCamera = null)
     {
         if (mainCamera == null) mainCamera = Camera.main;
 
 
         Vector2 screenPos = GetTouchScreenPosition();
-        Vector3 worldPos = mainCamera.ScreenToViewportPoint(new Vector3(screenPos.x, screenPos.y, mainCamera.nearClipPlane));
+        Vector3 worldPos = mainCamera.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, mainCamera.nearClipPlane));
 
         return worldPos;
     }
@@ -42,9 +42,7 @@ public class InputManager : MonoBehaviour
         input = new PlayerControls();
     }
 
-
-
-
+    #region Input Manager
     private void OnEnable()
     {
         input.Enable();
@@ -57,4 +55,5 @@ public class InputManager : MonoBehaviour
     {
         input.Disable();
     }
+    #endregion
 }
