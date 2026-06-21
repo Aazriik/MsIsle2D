@@ -504,7 +504,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
   m_UseReflectionProbes: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -561,6 +561,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e502b401391ce5745a0c0658cd5377ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
+  HUD: {fileID: 0}
+  PauseMenu: {fileID: 0}
 --- !u!1 &7450326694134674321
 GameObject:
   m_ObjectHideFlags: 0

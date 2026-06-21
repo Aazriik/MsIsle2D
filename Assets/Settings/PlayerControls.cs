@@ -89,25 +89,34 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     ""name"": ""PlayerControls"",
     ""maps"": [
         {
-            ""name"": ""Gameplay"",
+            ""name"": ""Touch"",
             ""id"": ""63a96668-dfe8-42b6-b1d0-e00aedc61aff"",
             ""actions"": [
                 {
-                    ""name"": ""Touch"",
+                    ""name"": ""TouchPress"",
                     ""type"": ""Button"",
                     ""id"": ""5e05f71d-21f7-4775-a563-4a59cae7d9dd"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press(behavior=2),Tap"",
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""PrimaryPosition"",
-                    ""type"": ""Value"",
+                    ""name"": ""TouchPosition"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""37b3bee9-5b7c-4ce4-be06-fd97547f0638"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""TouchHold"",
+                    ""type"": ""Value"",
+                    ""id"": ""14c11ecf-b173-496f-8658-120ff60a32e2"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": true
                 },
                 {
@@ -124,22 +133,22 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ef45b943-0bfb-434d-80c0-aaa7cf43819f"",
-                    ""path"": ""<Touchscreen>/Press"",
+                    ""path"": ""<Touchscreen>/primaryTouch/press"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Touch"",
+                    ""action"": ""TouchPress"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""ba8a152b-ad72-428e-9e92-2cdfa6fd8711"",
-                    ""path"": ""<Touchscreen>/position"",
+                    ""path"": ""<Touchscreen>/primaryTouch/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""PrimaryPosition"",
+                    ""action"": ""TouchPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -153,22 +162,34 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Tilt"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b4a681d-ccba-4c62-bc9e-31872a305383"",
+                    ""path"": ""<Touchscreen>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TouchHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
     ],
     ""controlSchemes"": []
 }");
-        // Gameplay
-        m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-        m_Gameplay_Touch = m_Gameplay.FindAction("Touch", throwIfNotFound: true);
-        m_Gameplay_PrimaryPosition = m_Gameplay.FindAction("PrimaryPosition", throwIfNotFound: true);
-        m_Gameplay_Tilt = m_Gameplay.FindAction("Tilt", throwIfNotFound: true);
+        // Touch
+        m_Touch = asset.FindActionMap("Touch", throwIfNotFound: true);
+        m_Touch_TouchPress = m_Touch.FindAction("TouchPress", throwIfNotFound: true);
+        m_Touch_TouchPosition = m_Touch.FindAction("TouchPosition", throwIfNotFound: true);
+        m_Touch_TouchHold = m_Touch.FindAction("TouchHold", throwIfNotFound: true);
+        m_Touch_Tilt = m_Touch.FindAction("Tilt", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
     {
-        UnityEngine.Debug.Assert(!m_Gameplay.enabled, "This will cause a leak and performance issues, PlayerControls.Gameplay.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Touch.enabled, "This will cause a leak and performance issues, PlayerControls.Touch.Disable() has not been called.");
     }
 
     /// <summary>
@@ -241,39 +262,44 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // Gameplay
-    private readonly InputActionMap m_Gameplay;
-    private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
-    private readonly InputAction m_Gameplay_Touch;
-    private readonly InputAction m_Gameplay_PrimaryPosition;
-    private readonly InputAction m_Gameplay_Tilt;
+    // Touch
+    private readonly InputActionMap m_Touch;
+    private List<ITouchActions> m_TouchActionsCallbackInterfaces = new List<ITouchActions>();
+    private readonly InputAction m_Touch_TouchPress;
+    private readonly InputAction m_Touch_TouchPosition;
+    private readonly InputAction m_Touch_TouchHold;
+    private readonly InputAction m_Touch_Tilt;
     /// <summary>
-    /// Provides access to input actions defined in input action map "Gameplay".
+    /// Provides access to input actions defined in input action map "Touch".
     /// </summary>
-    public struct GameplayActions
+    public struct TouchActions
     {
         private @PlayerControls m_Wrapper;
 
         /// <summary>
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
-        public GameplayActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public TouchActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "Gameplay/Touch".
+        /// Provides access to the underlying input action "Touch/TouchPress".
         /// </summary>
-        public InputAction @Touch => m_Wrapper.m_Gameplay_Touch;
+        public InputAction @TouchPress => m_Wrapper.m_Touch_TouchPress;
         /// <summary>
-        /// Provides access to the underlying input action "Gameplay/PrimaryPosition".
+        /// Provides access to the underlying input action "Touch/TouchPosition".
         /// </summary>
-        public InputAction @PrimaryPosition => m_Wrapper.m_Gameplay_PrimaryPosition;
+        public InputAction @TouchPosition => m_Wrapper.m_Touch_TouchPosition;
         /// <summary>
-        /// Provides access to the underlying input action "Gameplay/Tilt".
+        /// Provides access to the underlying input action "Touch/TouchHold".
         /// </summary>
-        public InputAction @Tilt => m_Wrapper.m_Gameplay_Tilt;
+        public InputAction @TouchHold => m_Wrapper.m_Touch_TouchHold;
+        /// <summary>
+        /// Provides access to the underlying input action "Touch/Tilt".
+        /// </summary>
+        public InputAction @Tilt => m_Wrapper.m_Touch_Tilt;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
+        public InputActionMap Get() { return m_Wrapper.m_Touch; }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
         public void Enable() { Get().Enable(); }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
@@ -281,9 +307,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
         public bool enabled => Get().enabled;
         /// <summary>
-        /// Implicitly converts an <see ref="GameplayActions" /> to an <see ref="InputActionMap" /> instance.
+        /// Implicitly converts an <see ref="TouchActions" /> to an <see ref="InputActionMap" /> instance.
         /// </summary>
-        public static implicit operator InputActionMap(GameplayActions set) { return set.Get(); }
+        public static implicit operator InputActionMap(TouchActions set) { return set.Get(); }
         /// <summary>
         /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
         /// </summary>
@@ -291,17 +317,20 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
         /// </remarks>
-        /// <seealso cref="GameplayActions" />
-        public void AddCallbacks(IGameplayActions instance)
+        /// <seealso cref="TouchActions" />
+        public void AddCallbacks(ITouchActions instance)
         {
-            if (instance == null || m_Wrapper.m_GameplayActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_GameplayActionsCallbackInterfaces.Add(instance);
-            @Touch.started += instance.OnTouch;
-            @Touch.performed += instance.OnTouch;
-            @Touch.canceled += instance.OnTouch;
-            @PrimaryPosition.started += instance.OnPrimaryPosition;
-            @PrimaryPosition.performed += instance.OnPrimaryPosition;
-            @PrimaryPosition.canceled += instance.OnPrimaryPosition;
+            if (instance == null || m_Wrapper.m_TouchActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_TouchActionsCallbackInterfaces.Add(instance);
+            @TouchPress.started += instance.OnTouchPress;
+            @TouchPress.performed += instance.OnTouchPress;
+            @TouchPress.canceled += instance.OnTouchPress;
+            @TouchPosition.started += instance.OnTouchPosition;
+            @TouchPosition.performed += instance.OnTouchPosition;
+            @TouchPosition.canceled += instance.OnTouchPosition;
+            @TouchHold.started += instance.OnTouchHold;
+            @TouchHold.performed += instance.OnTouchHold;
+            @TouchHold.canceled += instance.OnTouchHold;
             @Tilt.started += instance.OnTilt;
             @Tilt.performed += instance.OnTilt;
             @Tilt.canceled += instance.OnTilt;
@@ -313,27 +342,30 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <remarks>
         /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
         /// </remarks>
-        /// <seealso cref="GameplayActions" />
-        private void UnregisterCallbacks(IGameplayActions instance)
+        /// <seealso cref="TouchActions" />
+        private void UnregisterCallbacks(ITouchActions instance)
         {
-            @Touch.started -= instance.OnTouch;
-            @Touch.performed -= instance.OnTouch;
-            @Touch.canceled -= instance.OnTouch;
-            @PrimaryPosition.started -= instance.OnPrimaryPosition;
-            @PrimaryPosition.performed -= instance.OnPrimaryPosition;
-            @PrimaryPosition.canceled -= instance.OnPrimaryPosition;
+            @TouchPress.started -= instance.OnTouchPress;
+            @TouchPress.performed -= instance.OnTouchPress;
+            @TouchPress.canceled -= instance.OnTouchPress;
+            @TouchPosition.started -= instance.OnTouchPosition;
+            @TouchPosition.performed -= instance.OnTouchPosition;
+            @TouchPosition.canceled -= instance.OnTouchPosition;
+            @TouchHold.started -= instance.OnTouchHold;
+            @TouchHold.performed -= instance.OnTouchHold;
+            @TouchHold.canceled -= instance.OnTouchHold;
             @Tilt.started -= instance.OnTilt;
             @Tilt.performed -= instance.OnTilt;
             @Tilt.canceled -= instance.OnTilt;
         }
 
         /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="GameplayActions.UnregisterCallbacks(IGameplayActions)" />.
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="TouchActions.UnregisterCallbacks(ITouchActions)" />.
         /// </summary>
-        /// <seealso cref="GameplayActions.UnregisterCallbacks(IGameplayActions)" />
-        public void RemoveCallbacks(IGameplayActions instance)
+        /// <seealso cref="TouchActions.UnregisterCallbacks(ITouchActions)" />
+        public void RemoveCallbacks(ITouchActions instance)
         {
-            if (m_Wrapper.m_GameplayActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_TouchActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
@@ -343,42 +375,49 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
         /// </remarks>
-        /// <seealso cref="GameplayActions.AddCallbacks(IGameplayActions)" />
-        /// <seealso cref="GameplayActions.RemoveCallbacks(IGameplayActions)" />
-        /// <seealso cref="GameplayActions.UnregisterCallbacks(IGameplayActions)" />
-        public void SetCallbacks(IGameplayActions instance)
+        /// <seealso cref="TouchActions.AddCallbacks(ITouchActions)" />
+        /// <seealso cref="TouchActions.RemoveCallbacks(ITouchActions)" />
+        /// <seealso cref="TouchActions.UnregisterCallbacks(ITouchActions)" />
+        public void SetCallbacks(ITouchActions instance)
         {
-            foreach (var item in m_Wrapper.m_GameplayActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_TouchActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_GameplayActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_TouchActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
     /// <summary>
-    /// Provides a new <see cref="GameplayActions" /> instance referencing this action map.
+    /// Provides a new <see cref="TouchActions" /> instance referencing this action map.
     /// </summary>
-    public GameplayActions @Gameplay => new GameplayActions(this);
+    public TouchActions @Touch => new TouchActions(this);
     /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Gameplay" which allows adding and removing callbacks.
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Touch" which allows adding and removing callbacks.
     /// </summary>
-    /// <seealso cref="GameplayActions.AddCallbacks(IGameplayActions)" />
-    /// <seealso cref="GameplayActions.RemoveCallbacks(IGameplayActions)" />
-    public interface IGameplayActions
+    /// <seealso cref="TouchActions.AddCallbacks(ITouchActions)" />
+    /// <seealso cref="TouchActions.RemoveCallbacks(ITouchActions)" />
+    public interface ITouchActions
     {
         /// <summary>
-        /// Method invoked when associated input action "Touch" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "TouchPress" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnTouch(InputAction.CallbackContext context);
+        void OnTouchPress(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "PrimaryPosition" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "TouchPosition" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnPrimaryPosition(InputAction.CallbackContext context);
+        void OnTouchPosition(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TouchHold" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTouchHold(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Tilt" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

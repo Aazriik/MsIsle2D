@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     public GameObject HUD;
+    public GameObject PauseMenu;
 
     private void Start()
     {
@@ -29,11 +30,13 @@ public class MainMenu : MonoBehaviour
     {
         Time.timeScale = 0f;
         HUD.SetActive(false);
+        PauseMenu.SetActive(true);
     }
 
     public void Resume()
     {
         Time.timeScale = 1f;
         HUD.SetActive(true);
+        PauseMenu.SetActive(false);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 
 public class AudioManager : MonoBehaviour
 {
+    // Make this a Singleton.
     public static AudioManager Instance;
 
     #region Audio Libraries & Sources

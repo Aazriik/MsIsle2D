@@ -1,5 +1,7 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 public class KinematicProjectile : MonoBehaviour
 {
@@ -7,7 +9,14 @@ public class KinematicProjectile : MonoBehaviour
     Rigidbody2D rb;
     SpriteRenderer sr;
     TrailRenderer trail;
-    Collider2D collider2D;
+    //Collider2D collider2D;
+
+    // Input Controls
+    private PlayerControls input;
+    private InputAction touchPositionAction;
+    private InputAction touchPressAction;
+    private InputAction touchHoldAction;
+    
 
     public float speed;
     public float maxSpeed = 15f;
@@ -32,18 +41,37 @@ public class KinematicProjectile : MonoBehaviour
     bool isDragging = false;
     #endregion
 
-    #region Input Manager
+    #region Enable/Disable
     void OnEnable()
-    {   InputManager.Instance.OnTouchBegin += OnTouchBegin;
+    {
+        //touchPressAction.performed += TouchPressed;
+
+
+        InputManager.Instance.OnTouchBegin += OnTouchBegin;
         InputManager.Instance.OnTouchEnd += OnTouchEnd;
     }
 
     void OnDisable()
     {
+        //touchPressAction.performed -= TouchPressed;
+
+
         InputManager.Instance.OnTouchBegin -= OnTouchBegin;
         InputManager.Instance.OnTouchEnd -= OnTouchEnd;
     }
     #endregion
+
+
+
+    private void Awake()
+    {
+        // Input is now tied to the Player Controls Input Actions.
+        input = new PlayerControls();
+
+        //touchPressAction = input.FindAction("TouchPress");
+        //touchPositionAction = input.FindAction("TouchPosition");
+        //touchHoldAction = input.FindAction("TouchHold");
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -51,11 +79,9 @@ public class KinematicProjectile : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         trail = GetComponent<TrailRenderer>();
-        collider2D = GetComponent<Collider2D>();
         trail.enabled = false;
         startPos = rb.position;
         rb.bodyType = RigidbodyType2D.Kinematic;
-
     }
 
     // Update is called once per frame
@@ -90,28 +116,43 @@ public class KinematicProjectile : MonoBehaviour
         }
     }
 
+
+
+    //private void TouchPressed(InputAction.CallbackContext context)
+    //{
+    //    Debug.Log("Touch started " + input.Touch.TouchPosition.ReadValue<Vector2>());
+
+    //    Vector2 position = Camera.main.ScreenToWorldPoint
+    //        (touchPositionAction.ReadValue<Vector2>());
+    //}
+
+
+
+
     // Change Alpha Value of Sprite to 0.7 when you click on the projectile and change it back to 1 when you release the mouse button
     private void OnTouchBegin() // OnTouchBegin. Call DRAG function in update.
     {
+        Debug.Log("Touch started " + input.Touch.TouchPosition.ReadValue<Vector2>());
+
         // Grab Touch World Position.
-        Vector3 touchPos = InputManager.Instance.GetTouchWorldPosition();
-        // Raycast from camera to touch pos and see if you hit the colider, then accept dragging input.
+        Vector3 touchPos = InputManager.Instance.GetTouchScreenPosition();
 
-        Collider2D hitCollider = Physics2D.OverlapPoint(touchPos);
-
-        if (hitCollider == null)
-            return;
-
-        if (!isLaunched && (hitCollider = collider2D))
+        if (!isLaunched)
         {
             // Change Alpha Value of Sprite to 0.7
             sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.7f);
-            //isDragging = true;
+            isDragging = true;
         }
+
+        // Check for Double Tap.
+        
+
     }
 
     private void OnTouchEnd() //onTouchEnd. Call LAUNCH function in update.
     {
+        Debug.Log("Touch ended " + input.Touch.TouchPosition.ReadValue<Vector2>());
+
         if (!isLaunched)
         {
             isDragging = false;
@@ -134,7 +175,7 @@ public class KinematicProjectile : MonoBehaviour
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(InputManager.Instance.GetTouchScreenPosition());
         Vector2 desiredPos = mousePos;
 
-        isDragging = true;
+        //isDragging = true;
 
         float distance = Vector2.Distance(desiredPos, startPos);
         if (distance > maxDrag)

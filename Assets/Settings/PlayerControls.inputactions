@@ -3,25 +3,34 @@
     "name": "PlayerControls",
     "maps": [
         {
-            "name": "Gameplay",
+            "name": "Touch",
             "id": "63a96668-dfe8-42b6-b1d0-e00aedc61aff",
             "actions": [
                 {
-                    "name": "Touch",
+                    "name": "TouchPress",
                     "type": "Button",
                     "id": "5e05f71d-21f7-4775-a563-4a59cae7d9dd",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2),Tap",
                     "initialStateCheck": true
                 },
                 {
-                    "name": "PrimaryPosition",
-                    "type": "Value",
+                    "name": "TouchPosition",
+                    "type": "PassThrough",
                     "id": "37b3bee9-5b7c-4ce4-be06-fd97547f0638",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "TouchHold",
+                    "type": "Value",
+                    "id": "14c11ecf-b173-496f-8658-120ff60a32e2",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "Hold",
                     "initialStateCheck": true
                 },
                 {
@@ -38,22 +47,22 @@
                 {
                     "name": "",
                     "id": "ef45b943-0bfb-434d-80c0-aaa7cf43819f",
-                    "path": "<Touchscreen>/Press",
+                    "path": "<Touchscreen>/primaryTouch/press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Touch",
+                    "action": "TouchPress",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "ba8a152b-ad72-428e-9e92-2cdfa6fd8711",
-                    "path": "<Touchscreen>/position",
+                    "path": "<Touchscreen>/primaryTouch/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PrimaryPosition",
+                    "action": "TouchPosition",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -65,6 +74,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Tilt",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4b4a681d-ccba-4c62-bc9e-31872a305383",
+                    "path": "<Touchscreen>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TouchHold",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
