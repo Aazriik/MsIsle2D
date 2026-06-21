@@ -90,7 +90,7 @@ public class KinematicProjectile : MonoBehaviour
         if (isLaunched)
         {
             // Add Gravity to the projectile so that it follows a parabolic trajectory
-            // rb.AddForce uses the Physics Engine, butt since we are using a Kinematic Rigidbody, we will manually apply gravity by modifying the rb.linearVelocity of the Rigidbody2D. We will add a downward force to the linear velocity to simulate gravity. Then we will multiply it by Time.deltaTime to make it frame rate independent. Finally, we will multiply it by gravityScale to adjust the strength of the gravity.
+            // Manual Gravity using rb.linearVelocity.
             rb.linearVelocity += Vector2.down * gravityScale * Time.deltaTime;
             // Set rotation of the projectile to the direction of the trajectory
             // We will use the Atan2 function to calculate the angle of the trajectory based on the linear velocity of the Rigidbody2D. The Atan2 function takes the y and x components of the linear velocity and returns the angle in radians. We will then convert it to degrees by multiplying it by Mathf.Rad2Deg. We will also check if the y component of the linear velocity is greater than 0, which means the projectile is moving upwards, and if so, we will add 180 degrees to the angle to make it face downwards.
